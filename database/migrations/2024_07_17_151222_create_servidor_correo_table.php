@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('protocol');
             $table->string('host');
-            $table->integer('port');
+            $table->string('port');
             $table->string('encryption');
             $table->timestamps();
         });

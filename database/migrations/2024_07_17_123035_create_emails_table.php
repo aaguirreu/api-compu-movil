@@ -11,13 +11,15 @@ class CreateEmailsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('emails', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('servidor_id');
             $table->string('email');
             $table->string('password');
             $table->timestamps();
+            $table->foreign('servidor_id')->references('id')->on('servidor_correo');
         });
     }
 
