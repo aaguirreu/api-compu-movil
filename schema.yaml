@@ -1,0 +1,507 @@
+openapi: 3.0.0
+info:
+  title: API de Transacciones
+  version: 1.0.0
+paths:
+  /api/v1/login:
+    post:
+      summary: Iniciar sesión
+      description: Inicia sesión y obtiene un token Bearer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Éxito en el inicio de sesión
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+        '401':
+          description: No autorizado
+
+  /api/v1/register:
+    post:
+      summary: Registrar usuario
+      description: Registra un nuevo usuario.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+      responses:
+        '200':
+          description: Éxito en el registro
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+
+  /api/v1/logout:
+    post:
+      summary: Cerrar sesión
+      description: Cierra sesión y revoca el token Bearer.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Éxito en el cierre de sesión
+
+  /api/v1/transacciones:
+    get:
+      summary: Obtener transacciones
+      description: Obtiene la lista de transacciones.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Éxito en la obtención de transacciones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    banco_id:
+                      type: integer
+                    tipo:
+                      type: integer
+                    monto:
+                      type: integer
+                    descripcion:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+
+  /api/v1/emails:
+    get:
+      summary: Listar emails
+      description: Obtiene la lista de emails.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Éxito en la obtención de emails
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    email:
+                      type: string
+                    password:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+
+    post:
+      summary: Crear email
+      description: Crea un nuevo registro de email.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Éxito en la creación de email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  email:
+                    type: string
+                  password:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+
+  /api/v1/emails/{id}:
+    get:
+      summary: Obtener email por ID
+      description: Obtiene un email específico por su ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Éxito en la obtención del email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  email:
+                    type: string
+                  password:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+        '404':
+          description: Email no encontrado
+
+    put:
+      summary: Actualizar email
+      description: Actualiza un email existente por su ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Éxito en la actualización del email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  email:
+                    type: string
+                  password:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+        '404':
+          description: Email no encontrado
+
+    delete:
+      summary: Eliminar email
+      description: Elimina un email existente por su ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Éxito en la eliminación del email
+        '404':
+          description: Email no encontrado
+
+  /api/v1/bancos:
+    get:
+      summary: Listar bancos
+      description: Obtiene la lista de bancos.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Éxito en la obtención de bancos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    user_id:
+                      type: integer
+                    email_id:
+                      type: integer
+                    nombre:
+                      type: string
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+
+    post:
+      summary: Crear banco
+      description: Crea un nuevo registro de banco.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                email_id:
+                  type: integer
+                nombre:
+                  type: string
+              required:
+                - user_id
+                - email_id
+                - nombre
+      responses:
+        '200':
+          description: Éxito en la creación de banco
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  email_id:
+                    type: integer
+                  nombre:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+
+  /api/v1/bancos/{id}:
+    get:
+      summary: Obtener banco por ID
+      description: Obtiene un banco específico por su ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Éxito en la obtención del banco
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  email_id:
+                    type: integer
+                  nombre:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+        '404':
+          description: Banco no encontrado
+
+    put:
+      summary: Actualizar banco
+      description: Actualiza un banco existente por su ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                email_id:
+                  type: integer
+                nombre:
+                  type: string
+              required:
+                - user_id
+                - email_id
+                - nombre
+      responses:
+        '200':
+          description: Éxito en la actualización del banco
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  email_id:
+                    type: integer
+                  nombre:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+        '404':
+          description: Banco no encontrado
+
+    delete:
+      summary: Eliminar banco
+      description: Elimina un banco existente por su ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Éxito en la eliminación del banco
+        '404':
+          description: Banco no encontrado
+
+components:
+  schemas:
+    Email:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+        password:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Banco:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+        email_id:
+          type: integer
+        nombre:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Transaccion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        banco_id:
+          type: integer
+        tipo:
+          type: integer
+        monto:
+          type: integer
+        descripcion:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
