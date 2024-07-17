@@ -5,16 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Banco extends Model
+class Movimiento extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'nombre',
+        'cuenta_id',
+        'tipo',
+        'monto',
+        'descripcion'
     ];
 
-    public function cuentas()
+    public function cuenta()
     {
-        return $this->hasMany(Cuenta::class);
+        return $this->belongsTo(Cuenta::class);
     }
 }

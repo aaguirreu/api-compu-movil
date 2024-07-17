@@ -8,8 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Webklex\IMAP\Facades\Client;
-use App\Models\UserImapCredential;
-use App\Models\Transaccion;
+use App\Models\Email;
+use App\Models\Movimiento;
 
 class EmailListener implements ShouldQueue
 {
@@ -22,7 +22,7 @@ class EmailListener implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(UserImapCredential $credential)
+    public function __construct(Email $credential)
     {
         $this->credential = $credential;
     }
@@ -36,12 +36,12 @@ class EmailListener implements ShouldQueue
     {
         // Configurar el cliente IMAP con las credenciales del usuario
         $client = Client::make([
-            'host'  => $this->credential->imap_host,
-            'port'  => $this->credential->imap_port,
-            'encryption'    => $this->credential->imap_encryption,
+            'host'  => $this->credential->host,
+            'port'  => $this->credential->port,
+            'encryption'    => $this->credential->encryption,
             'validate_cert' => true,
-            'username' => $this->credential->imap_username,
-            'password' => $this->credential->imap_password,
+            'username' => $this->credential->email,
+            'password' => $this->credential->password,
         ]);
 
         $client->connect();
@@ -55,7 +55,7 @@ class EmailListener implements ShouldQueue
             $data = $this->extractTransactionData($message);
 
             if ($data) {
-                Transaccion::create($data);
+                Movimiento::create($data);
             }
 
             // Marcar el mensaje como leído

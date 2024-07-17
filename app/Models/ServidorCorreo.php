@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Transaccion extends Model
+class ServidorCorreo extends Model
 {
     use HasFactory;
 
@@ -14,18 +14,17 @@ class Transaccion extends Model
      *
      * @var string
      */
-    protected $table = 'transacciones';
+    protected $table = 'servidor_correo';
 
     protected $fillable = [
-        'banco_id',
-        'tipo',
-        'monto',
-        'descripcion',
-        'created_at',
+        'protocol',
+        'host',
+        'port',
+        'encryption',
     ];
 
-    public function banco()
+    public function emails()
     {
-        return $this->belongsTo(Banco::class);
+        return $this->hasMany(Email::class);
     }
 }
